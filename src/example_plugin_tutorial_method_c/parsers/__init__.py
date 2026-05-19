@@ -6,7 +6,7 @@ class NewParserEntryPoint(ParserEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from example_plugin_tutorial.parsers.parser import NewParser
+        from example_plugin_tutorial_method_c.parsers.parser import NewParser
 
         return NewParser(**self.model_dump())
 

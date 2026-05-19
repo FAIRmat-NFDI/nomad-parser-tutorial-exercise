@@ -6,7 +6,7 @@ class NewSchemaPackageEntryPoint(SchemaPackageEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from example_plugin_tutorial.schema_packages.schema_package import m_package
+        from example_plugin_tutorial_method_a.schema_packages.schema_package import m_package
 
         return m_package
 
