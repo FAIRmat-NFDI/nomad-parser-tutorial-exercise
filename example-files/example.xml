@@ -1,0 +1,11 @@
+<image_metadata type="microscopy">
+  <resolution>1024x768</resolution>
+  <magnification>40x</magnification>
+  <sample>
+    <sample_ID>Sample_001</sample_ID>
+    <description>Sample description goes here.</description>
+  </sample>
+  <deviceName>Microscope XYZ</deviceName>
+  <datetime>2025-06-01T12:00:00</datetime>
+  <imageFileName>image_001.bmp</imageFileName>
+</image_metadata>
