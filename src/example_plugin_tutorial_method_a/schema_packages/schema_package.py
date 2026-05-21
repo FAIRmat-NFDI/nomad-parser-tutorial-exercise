@@ -20,7 +20,7 @@ from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
 
 configuration = config.get_plugin_entry_point(
-    'example_plugin_tutorial.schema_packages:example_microscopy_entry_point'
+    'example_plugin_tutorial_method_a.schema_packages:example_microscopy_entry_point'
 )
 
 m_package = SchemaPackage()
