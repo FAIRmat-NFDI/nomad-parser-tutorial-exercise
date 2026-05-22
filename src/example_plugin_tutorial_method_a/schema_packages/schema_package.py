@@ -54,7 +54,14 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
+        from example_plugin_tutorial_method_a.util.reader import read_xml_to_dict
+
         super().normalize(archive, logger)
+        print('#######1#######')
+
+        if self.file is not None:
+            data_dict = read_xml_to_dict(self.file, archive, logger) # type: ignore
+            print(f'Parsed data from xml file: {data_dict}')
 
 
 m_package.__init_metainfo__()
