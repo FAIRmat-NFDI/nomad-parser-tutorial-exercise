@@ -56,11 +56,6 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
         description='Microscopy image magnification',
     )
 
-    image_file = Quantity(
-        type=str,
-        description='Microscopy image file.',
-        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
-    )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         from example_plugin_tutorial_method_a.util.reader import read_xml_to_dict
