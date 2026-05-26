@@ -24,6 +24,8 @@ from nomad.datamodel.data import Schema
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
 
+from util.utils import merge_sections
+
 configuration = config.get_plugin_entry_point(
     'example_plugin_tutorial_method_b.schema_packages:example_microscopy_entry_point'
 )
@@ -80,8 +82,6 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         from util.reader import read_xml_to_dict
 
-        super().normalize(archive, logger)
-
         if self.file is not None:
             data_dict_full = read_xml_to_dict(self.file, archive, logger) # type: ignore
             data_dict = data_dict_full.get('image_metadata', {})
@@ -90,24 +90,34 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
                 return
 
             if 'resolution' in data_dict:
-                self.resolution = [float(x) for x in data_dict['resolution'].split('x')]
+                resolution = [float(x) for x in data_dict['resolution'].split('x')]
             if 'magnification' in data_dict:
-                self.magnification = float(data_dict['magnification'][:-1])
+                magnification = float(data_dict['magnification'][:-1])
             if 'sample' in data_dict and isinstance(data_dict['sample'], dict) and 'sample_ID' in data_dict['sample']:
                 sample = data_dict['sample']
-                self.samples = [
+                samples = [
                     CompositeSystemReference(
                         lab_id=sample['sample_ID'],
                     )
                 ]
             if 'deviceName' in data_dict:
-                self.instruments = [
+                instruments = [
                     InstrumentReference(
                         name=data_dict['deviceName'],
                     )
                 ]
             if 'datetime' in data_dict:
-                self.datetime = data_dict['datetime']
+                datetime = data_dict['datetime']
+            update_section = ExampleMicroscopyMeasurement(
+                resolution=resolution,
+                magnification=magnification,
+                samples=samples,
+                instruments=instruments,
+                datetime=datetime,
+            )
+            merge_sections(self, update_section, logger)
+
+        super().normalize(archive, logger)
 
 
 m_package.__init_metainfo__()
