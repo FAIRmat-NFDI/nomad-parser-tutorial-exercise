@@ -12,7 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
 ]
-name = "example_plugin_tutorial"
+name = "nomad-parser-tutorial-exercise"
 description = "repository for parser tutorial examples"
 version = "0.1.0"
 readme = "README.md"
@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/GinzburgLev/example_plugin_tutorial"
+Repository = "https://github.com/GinzburgLev/nomad-parser-tutorial-exercise"
 
 [project.optional-dependencies]
 dev = [
