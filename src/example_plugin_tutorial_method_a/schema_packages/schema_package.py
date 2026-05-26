@@ -58,7 +58,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
 
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from example_plugin_tutorial_method_a.util.reader import read_xml_to_dict
+        from util.reader import read_xml_to_dict
 
         super().normalize(archive, logger)
 

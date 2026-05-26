@@ -12,7 +12,7 @@ class ExampleCategory(EntryDataCategory):
     m_def = Category(label='ExamplePlugin', categories=[EntryDataCategory])
 
 
-class NewSchemaPackageEntryPoint(SchemaPackageEntryPoint):
+class ExampleMicroscopyEntryPoint(SchemaPackageEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
@@ -23,7 +23,7 @@ class NewSchemaPackageEntryPoint(SchemaPackageEntryPoint):
         return m_package
 
 
-schema_package_entry_point = NewSchemaPackageEntryPoint(
-    name='NewSchemaPackage',
-    description='New schema package entry point configuration.',
+example_microscopy_entry_point = ExampleMicroscopyEntryPoint(
+    name='ExampleMicroscopy',
+    description='Example microscopy schema package entry point.',
 )

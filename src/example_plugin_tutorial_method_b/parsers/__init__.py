@@ -2,17 +2,17 @@ from nomad.config.models.plugins import ParserEntryPoint
 from pydantic import Field
 
 
-class NewParserEntryPoint(ParserEntryPoint):
+class ExampleMicroscopyParserEntryPoint(ParserEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from example_plugin_tutorial_method_b.parsers.parser import NewParser
+        from example_plugin_tutorial_method_b.parsers.parser import ExampleXMLParser
 
-        return NewParser(**self.model_dump())
+        return ExampleXMLParser(**self.model_dump())
 
 
-parser_entry_point = NewParserEntryPoint(
-    name='NewParser',
-    description='New parser entry point configuration.',
-    mainfile_name_re=r'.*\.newmainfilename',
+example_microscopy_parser_entry_point = ExampleMicroscopyParserEntryPoint(
+    name='ExampleMicroscopyParser',
+    description='Example microscopy parser entry point.',
+    mainfile_name_re=r'.*\.xml$',
 )

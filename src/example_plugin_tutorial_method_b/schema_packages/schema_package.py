@@ -5,6 +5,7 @@ from typing import (
 from nomad.datamodel.metainfo.basesections import (
     CompositeSystemReference,
     InstrumentReference,
+    Measurement,
 )
 from nomad.datamodel.metainfo.eln import ELNMeasurement
 
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     )
 
 from nomad.config import config
+from nomad.datamodel.data import Schema
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
 
@@ -27,6 +29,24 @@ configuration = config.get_plugin_entry_point(
 )
 
 m_package = SchemaPackage()
+
+
+class RawFileData(Schema):
+    """
+    Section for storing a directly parsed raw data file.
+    """
+    m_def = Section(
+        description='A section for storing the raw data file that was parsed'
+        'by the example parser.',
+    )
+    measurement = Quantity(
+        type=Measurement,
+        a_eln=ELNAnnotation(
+            component='ReferenceEditQuantity',
+            description='A reference to the measurement entry that was generated from '
+            'this data.',
+        ),
+    )
 
 
 class ExampleMicroscopyMeasurement(ELNMeasurement):
