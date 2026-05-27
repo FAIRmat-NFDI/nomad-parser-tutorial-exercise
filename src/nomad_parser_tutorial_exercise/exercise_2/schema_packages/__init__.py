@@ -1,14 +1,4 @@
 from nomad.config.models.plugins import SchemaPackageEntryPoint
-from nomad.datamodel.data import EntryDataCategory
-from nomad.metainfo.metainfo import Category
-
-
-class ExampleCategory(EntryDataCategory):
-    """
-    A category for all measurements defined in the example nomad plugin.
-    """
-
-    m_def = Category(label='ExamplePlugin', categories=[EntryDataCategory])
 
 
 class ExampleMicroscopySchemaEntryPoint(SchemaPackageEntryPoint):

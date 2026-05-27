@@ -8,8 +8,7 @@ from nomad.datamodel.metainfo.basesections import (
     Measurement,
 )
 from nomad.datamodel.metainfo.eln import ELNMeasurement
-
-from nomad_parser_tutorial_exercise.exercise_2.schema_packages import ExampleCategory
+from nomad.metainfo.metainfo import Category
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import (
@@ -19,13 +18,21 @@ if TYPE_CHECKING:
         BoundLogger,
     )
 
-from nomad.datamodel.data import Schema
+from nomad.datamodel.data import EntryDataCategory, Schema
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
 
 from nomad_parser_tutorial_exercise.util.utils import merge_sections
 
 m_package = SchemaPackage()
+
+
+class ExampleCategory(EntryDataCategory):
+    """
+    A category for all measurements defined in the example nomad plugin.
+    """
+
+    m_def = Category(label='ExamplePlugin', categories=[EntryDataCategory])
 
 
 class RawFileData(Schema):
