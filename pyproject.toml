@@ -18,10 +18,13 @@ version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "Lev Ginzburg", email = "lev.ginzburg@physik.hu-berlin.de" },
+    { name = "Lev Ginzburg"},
+    { name = "Sarthak Kapoor" },
+    { name = "Hampus Näsström" },
+    { email = "fairmat@physik.hu-berlin.de" },
 ]
 maintainers = [
-    { name = "Lev Ginzburg", email = "lev.ginzburg@physik.hu-berlin.de" },
+    { name = "FAIRmat", email = "fairmat@physik.hu-berlin.de" },
 ]
 license = { file = "LICENSE" }
 dependencies = [
