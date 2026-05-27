@@ -12,16 +12,11 @@ if TYPE_CHECKING:
         BoundLogger,
     )
 
-from nomad.config import config
 from nomad.parsing.parser import MatchingParser
 
 from example_plugin_tutorial_method_b.schema_packages.schema_package import (
     ExampleMicroscopyMeasurement,
     RawFileData,
-)
-
-configuration = config.get_plugin_entry_point(
-    'example_plugin_tutorial_method_b.parsers:example_microscopy_parser_entry_point'
 )
 
 

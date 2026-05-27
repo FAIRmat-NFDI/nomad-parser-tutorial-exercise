@@ -18,13 +18,8 @@ if TYPE_CHECKING:
         BoundLogger,
     )
 
-from nomad.config import config
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
-
-configuration = config.get_plugin_entry_point(
-    'example_plugin_tutorial_method_a.schema_packages:example_microscopy_entry_point'
-)
 
 m_package = SchemaPackage()
 
@@ -46,9 +41,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     resolution = Quantity(
-        type=float,
-        description='Microscopy image resolution',
-        shape=[2]
+        type=float, description='Microscopy image resolution', shape=[2]
     )
 
     magnification = Quantity(
@@ -56,16 +49,17 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
         description='Microscopy image magnification',
     )
 
-
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         from util.reader import read_xml_to_dict
 
         super().normalize(archive, logger)
 
         if self.file is not None:
-            data_dict_full = read_xml_to_dict(self.file, archive, logger) # type: ignore
+            data_dict_full = read_xml_to_dict(self.file, archive, logger)  # type: ignore
             data_dict = data_dict_full.get('image_metadata', {})
-            if not (isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'):
+            if not (
+                isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'
+            ):
                 logger.warning('Unexpected structure of the xml file')
                 return
 
@@ -73,7 +67,11 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
                 self.resolution = [float(x) for x in data_dict['resolution'].split('x')]
             if 'magnification' in data_dict:
                 self.magnification = float(data_dict['magnification'][:-1])
-            if 'sample' in data_dict and isinstance(data_dict['sample'], dict) and 'sample_ID' in data_dict['sample']:
+            if (
+                'sample' in data_dict
+                and isinstance(data_dict['sample'], dict)
+                and 'sample_ID' in data_dict['sample']
+            ):
                 sample = data_dict['sample']
                 self.samples = [
                     CompositeSystemReference(
