@@ -34,9 +34,15 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
         label='Example Microscopy ELN',
     )
 
-    file = Quantity(
+    metadata_file = Quantity(
         type=str,
         description='File containing the data.',
+        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
+    )
+
+    image_file = Quantity(
+        type=str,
+        description='Microscopy image file.',
         a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
     )
 
@@ -54,8 +60,8 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
 
         super().normalize(archive, logger)
 
-        if self.file is not None:
-            data_dict_full = read_xml_to_dict(self.file, archive, logger)  # type: ignore
+        if self.metadata_file is not None:
+            data_dict_full = read_xml_to_dict(self.metadata_file, archive, logger)  # type: ignore
             data_dict = data_dict_full.get('image_metadata', {})
             if not (
                 isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'

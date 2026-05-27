@@ -33,9 +33,15 @@ class ExampleMicroscopyMeasurement(Measurement, EntryData):
         label='Example Microscopy ELN',
     )
 
-    file = Quantity(
+    metadata_file = Quantity(
         type=str,
         description='File containing the data.',
+        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
+    )
+
+    image_file = Quantity(
+        type=str,
+        description='Microscopy image file.',
         a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
     )
 

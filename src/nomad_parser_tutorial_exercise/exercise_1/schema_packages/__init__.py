@@ -1,7 +1,6 @@
 from nomad.config.models.plugins import SchemaPackageEntryPoint
 from nomad.datamodel.data import EntryDataCategory
 from nomad.metainfo.metainfo import Category
-from pydantic import Field
 
 
 class ExampleCategory(EntryDataCategory):
@@ -13,8 +12,6 @@ class ExampleCategory(EntryDataCategory):
 
 
 class ExampleMicroscopySchemaEntryPoint(SchemaPackageEntryPoint):
-    parameter: int = Field(0, description='Custom configuration parameter')
-
     def load(self):
         from nomad_parser_tutorial_exercise.exercise_1.schema_packages.schema_package import (
             m_package,

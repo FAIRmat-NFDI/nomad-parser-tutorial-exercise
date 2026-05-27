@@ -33,7 +33,7 @@ def create_archive(
         ) as entry:
             entry['data'] = entity.m_to_dict(with_root_def=True)
     return get_reference(
-        archive.metadata.upload_id, # pyright: ignore[reportArgumentType]
+        archive.metadata.upload_id,  # pyright: ignore[reportArgumentType]
         get_entry_id_from_file_name(file_name, archive),
     )
 

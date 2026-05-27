@@ -36,7 +36,7 @@ class ExampleXMLParser(MatchingParser):
         logger.info(f' Example XML Parser called {filename}')
 
         measurement_entry = ExampleMicroscopyMeasurement(
-            file=filename,
+            metadata_file=filename,
         )
 
         archive.data = RawFileData(

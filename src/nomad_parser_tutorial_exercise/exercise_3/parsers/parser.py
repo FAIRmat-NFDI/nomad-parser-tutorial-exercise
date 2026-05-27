@@ -31,10 +31,11 @@ class ExampleMicroscopyParser(MatchingParser):
         child_archives: dict[str, 'EntryArchive'] = None,  # pyright: ignore[reportArgumentType]
     ) -> None:
         data_dict_full = XMLParser(filepath=mainfile).to_dict()
-        print(mainfile, data_dict_full)
-        entry_data_section = ExampleMicroscopyMeasurement()
-
         data_dict = data_dict_full.get('image_metadata', {})
+
+        entry_data_section = ExampleMicroscopyMeasurement(
+            metadata_file=mainfile.rsplit('/raw/', maxsplit=1)[-1]
+        )
         if not (isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'):
             logger.warning('Unexpected structure of the xml file')
             return
@@ -64,5 +65,7 @@ class ExampleMicroscopyParser(MatchingParser):
             ]
         if 'datetime' in data_dict:
             entry_data_section.datetime = data_dict['datetime']
+        if 'imageFileName' in data_dict:
+            entry_data_section.image_file = data_dict['imageFileName']
 
         archive.data = entry_data_section

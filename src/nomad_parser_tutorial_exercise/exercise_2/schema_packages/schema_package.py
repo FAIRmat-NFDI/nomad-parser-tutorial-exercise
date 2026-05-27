@@ -57,9 +57,15 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
         label='Example Microscopy ELN',
     )
 
-    file = Quantity(
+    metadata_file = Quantity(
         type=str,
         description='File containing the data.',
+        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
+    )
+
+    image_file = Quantity(
+        type=str,
+        description='Microscopy image file.',
         a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
     )
 
@@ -75,18 +81,20 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         from nomad_parser_tutorial_exercise.util.reader import read_xml_to_dict
 
-        if self.file is not None:
-            data_dict_full = read_xml_to_dict(self.file, archive, logger)  # type: ignore
+        if self.metadata_file is not None:
+            data_dict_full = read_xml_to_dict(self.metadata_file, archive, logger)  # type: ignore
             data_dict = data_dict_full.get('image_metadata', {})
             if not (
                 isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'
             ):
                 logger.warning('Unexpected structure of the xml file')
                 return
-            
+
             update_section = ExampleMicroscopyMeasurement()
             if 'resolution' in data_dict:
-                update_section.resolution = [float(x) for x in data_dict['resolution'].split('x')]
+                update_section.resolution = [
+                    float(x) for x in data_dict['resolution'].split('x')
+                ]
             if 'magnification' in data_dict:
                 update_section.magnification = float(data_dict['magnification'][:-1])
             if (
@@ -108,6 +116,8 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
                 ]
             if 'datetime' in data_dict:
                 update_section.datetime = data_dict['datetime']
+            if 'imageFileName' in data_dict:
+                update_section.image_file = data_dict['imageFileName']
             merge_sections(self, update_section, logger)  # pyright: ignore[reportArgumentType]
 
         super().normalize(archive, logger)
