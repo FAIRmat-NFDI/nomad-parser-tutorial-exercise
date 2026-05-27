@@ -2,11 +2,13 @@ import logging
 
 from nomad.datamodel import EntryArchive
 
-from nomad_parser_tutorial_exercise.exercise_2.parsers.parser import ExampleXMLParser
+from nomad_parser_tutorial_exercise.exercise_3.parsers.parser import (
+    ExampleMicroscopyParser,
+)
 
 
 def test_parse_file():
-    parser = ExampleXMLParser()
+    parser = ExampleMicroscopyParser()
     archive = EntryArchive()
     parser.parse('tests/data/example.out', archive, logging.getLogger()) # type: ignore
 
