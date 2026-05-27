@@ -9,7 +9,7 @@ from nomad.datamodel.metainfo.basesections import (
 )
 from nomad.datamodel.metainfo.eln import ELNMeasurement
 
-from example_plugin_tutorial_method_b.schema_packages import ExampleCategory
+from nomad_parser_tutorial_exercise.exercise_2.schema_packages import ExampleCategory
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import (
@@ -22,7 +22,8 @@ if TYPE_CHECKING:
 from nomad.datamodel.data import Schema
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
-from util.utils import merge_sections
+
+from nomad_parser_tutorial_exercise.util.utils import merge_sections
 
 m_package = SchemaPackage()
 
@@ -72,7 +73,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from util.reader import read_xml_to_dict
+        from nomad_parser_tutorial_exercise.util.reader import read_xml_to_dict
 
         if self.file is not None:
             data_dict_full = read_xml_to_dict(self.file, archive, logger)  # type: ignore
@@ -82,38 +83,32 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
             ):
                 logger.warning('Unexpected structure of the xml file')
                 return
-
+            
+            update_section = ExampleMicroscopyMeasurement()
             if 'resolution' in data_dict:
-                resolution = [float(x) for x in data_dict['resolution'].split('x')]
+                update_section.resolution = [float(x) for x in data_dict['resolution'].split('x')]
             if 'magnification' in data_dict:
-                magnification = float(data_dict['magnification'][:-1])
+                update_section.magnification = float(data_dict['magnification'][:-1])
             if (
                 'sample' in data_dict
                 and isinstance(data_dict['sample'], dict)
                 and 'sample_ID' in data_dict['sample']
             ):
                 sample = data_dict['sample']
-                samples = [
+                update_section.samples = [
                     CompositeSystemReference(
                         lab_id=sample['sample_ID'],
                     )
                 ]
             if 'deviceName' in data_dict:
-                instruments = [
+                update_section.instruments = [
                     InstrumentReference(
                         name=data_dict['deviceName'],
                     )
                 ]
             if 'datetime' in data_dict:
-                datetime = data_dict['datetime']
-            update_section = ExampleMicroscopyMeasurement(
-                resolution=resolution,
-                magnification=magnification,
-                samples=samples,
-                instruments=instruments,
-                datetime=datetime,
-            )
-            merge_sections(self, update_section, logger)
+                update_section.datetime = data_dict['datetime']
+            merge_sections(self, update_section, logger)  # pyright: ignore[reportArgumentType]
 
         super().normalize(archive, logger)
 

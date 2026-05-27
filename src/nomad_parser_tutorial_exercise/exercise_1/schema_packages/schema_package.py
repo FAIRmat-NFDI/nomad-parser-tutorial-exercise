@@ -8,7 +8,7 @@ from nomad.datamodel.metainfo.basesections import (
 )
 from nomad.datamodel.metainfo.eln import ELNMeasurement
 
-from example_plugin_tutorial_method_a.schema_packages import ExampleCategory
+from nomad_parser_tutorial_exercise.exercise_1.schema_packages import ExampleCategory
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import (
@@ -50,7 +50,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from util.reader import read_xml_to_dict
+        from nomad_parser_tutorial_exercise.util.reader import read_xml_to_dict
 
         super().normalize(archive, logger)
 

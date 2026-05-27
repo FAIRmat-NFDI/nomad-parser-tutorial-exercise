@@ -12,18 +12,18 @@ class ExampleCategory(EntryDataCategory):
     m_def = Category(label='ExamplePlugin', categories=[EntryDataCategory])
 
 
-class ExampleMicroscopyEntryPoint(SchemaPackageEntryPoint):
+class ExampleMicroscopySchemaEntryPoint(SchemaPackageEntryPoint):
     parameter: int = Field(0, description='Custom configuration parameter')
 
     def load(self):
-        from example_plugin_tutorial_method_b.schema_packages.schema_package import (
+        from nomad_parser_tutorial_exercise.exercise_2.schema_packages.schema_package import (
             m_package,
         )
 
         return m_package
 
 
-example_microscopy_entry_point = ExampleMicroscopyEntryPoint(
+example_microscopy_schema_entry_point = ExampleMicroscopySchemaEntryPoint(
     name='ExampleMicroscopy',
     description='Example microscopy schema package entry point.',
 )

@@ -33,7 +33,8 @@ def create_archive(
         ) as entry:
             entry['data'] = entity.m_to_dict(with_root_def=True)
     return get_reference(
-        archive.metadata.upload_id, get_entry_id_from_file_name(file_name, archive)
+        archive.metadata.upload_id, # pyright: ignore[reportArgumentType]
+        get_entry_id_from_file_name(file_name, archive),
     )
 
 
@@ -44,14 +45,14 @@ def _not_equal(a, b) -> bool:
         # If the comparison fails, we assume they are not equal
         return True
     if isinstance(comparison, np.ndarray):
-        return comparison.any()
+        return comparison.any()  # pyright: ignore[reportReturnType]
     return comparison
 
 
 def merge_sections(  # noqa: PLR0912
     section: 'ArchiveSection',
     update: 'ArchiveSection',
-    logger: 'BoundLogger' = None,
+    logger: 'BoundLogger' = None,  # pyright: ignore[reportArgumentType]
 ) -> None:
     """
     Unpopulated quantities and subsections in the `section` will be populated with the
@@ -76,7 +77,7 @@ def merge_sections(  # noqa: PLR0912
             'Cannot merge sections of different types: '
             f'{type(section)} and {type(update)}'
         )
-    for name, quantity in update.m_def.all_quantities.items():
+    for name, quantity in update.m_def.all_quantities.items():  # type: ignore
         if not update.m_is_set(quantity):
             continue
         if not section.m_is_set(quantity):
@@ -87,7 +88,7 @@ def merge_sections(  # noqa: PLR0912
                 logger.warning(warning)
             else:
                 print(warning)
-    for name, sub_section_def in update.m_def.all_sub_sections.items():
+    for name, sub_section_def in update.m_def.all_sub_sections.items():  # type: ignore
         count = section.m_sub_section_count(sub_section_def)
         if count == 0:
             for update_sub_section in update.m_get_sub_sections(sub_section_def):
@@ -95,8 +96,8 @@ def merge_sections(  # noqa: PLR0912
         elif count == update.m_sub_section_count(sub_section_def):
             for i in range(count):
                 merge_sections(
-                    section.m_get_sub_section(sub_section_def, i),
-                    update.m_get_sub_section(sub_section_def, i),
+                    section.m_get_sub_section(sub_section_def, i),  # pyright: ignore[reportArgumentType]
+                    update.m_get_sub_section(sub_section_def, i),  # pyright: ignore[reportArgumentType]
                     logger,
                 )
         elif update.m_sub_section_count(sub_section_def) > 0:

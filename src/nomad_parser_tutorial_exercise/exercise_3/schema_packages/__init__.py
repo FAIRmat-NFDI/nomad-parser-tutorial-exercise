@@ -1,7 +1,7 @@
 from nomad.config.models.plugins import SchemaPackageEntryPoint
 
 
-class ExampleMicroscopyEntryPoint(SchemaPackageEntryPoint):
+class ExampleMicroscopySchemaEntryPoint(SchemaPackageEntryPoint):
     def load(self):
         from nomad_parser_tutorial_exercise.exercise_3.schema_packages.schema_package import (
             m_package,
@@ -10,7 +10,7 @@ class ExampleMicroscopyEntryPoint(SchemaPackageEntryPoint):
         return m_package
 
 
-example_microscopy_entry_point = ExampleMicroscopyEntryPoint(
+example_microscopy_schema_entry_point = ExampleMicroscopySchemaEntryPoint(
     name='ExampleMicroscopy',
     description='Example microscopy schema package entry point.',
 )

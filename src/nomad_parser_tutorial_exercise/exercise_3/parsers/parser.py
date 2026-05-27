@@ -27,8 +27,8 @@ class ExampleMicroscopyParser(MatchingParser):
         self,
         mainfile: str,
         archive: 'EntryArchive',
-        logger: 'BoundLogger' = None,
-        child_archives: dict[str, 'EntryArchive'] = None,
+        logger: 'BoundLogger' = None,  # pyright: ignore[reportArgumentType]
+        child_archives: dict[str, 'EntryArchive'] = None,  # pyright: ignore[reportArgumentType]
     ) -> None:
         data_dict_full = XMLParser(filepath=mainfile).to_dict()
         print(mainfile, data_dict_full)

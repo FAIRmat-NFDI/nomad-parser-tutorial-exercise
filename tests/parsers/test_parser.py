@@ -2,12 +2,12 @@ import logging
 
 from nomad.datamodel import EntryArchive
 
-from example_plugin_tutorial.parsers.parser import NewParser
+from nomad_parser_tutorial_exercise.exercise_2.parsers.parser import ExampleXMLParser
 
 
 def test_parse_file():
-    parser = NewParser()
+    parser = ExampleXMLParser()
     archive = EntryArchive()
-    parser.parse('tests/data/example.out', archive, logging.getLogger())
+    parser.parse('tests/data/example.out', archive, logging.getLogger()) # type: ignore
 
     assert archive.workflow2.name == 'test'
