@@ -133,10 +133,7 @@ where = ["src"]
 [project.entry-points.'nomad.plugin']
 schema_package_entry_point = "nomad_parser_tutorial_exercise.exercise_3.schema_packages:example_microscopy_schema_entry_point"
 parser_entry_point = "nomad_parser_tutorial_exercise.exercise_3.parsers:example_microscopy_parser_entry_point"
-
-
-
-
+schema_tutorial_entry_point = "nomad_parser_tutorial_exercise.schema_tutorial:microscopy_schema_entry_point"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues

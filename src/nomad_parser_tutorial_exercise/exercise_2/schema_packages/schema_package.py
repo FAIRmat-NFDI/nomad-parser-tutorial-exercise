@@ -86,10 +86,12 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from nomad_parser_tutorial_exercise.util.reader import read_xml_to_dict
+        from nomad_parser_tutorial_exercise.util.reader import (
+            read_data_file,
+        )
 
         if self.metadata_file is not None:
-            data_dict_full = read_xml_to_dict(self.metadata_file, archive, logger)  # type: ignore
+            data_dict_full = read_data_file(self.metadata_file, archive, logger)  # type: ignore
             data_dict = data_dict_full.get('image_metadata', {})
             if not (
                 isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'
