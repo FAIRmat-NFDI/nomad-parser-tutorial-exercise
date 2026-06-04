@@ -2,7 +2,12 @@ import os
 from typing import TYPE_CHECKING
 
 from nomad.datamodel.data import ArchiveSection, EntryData
-from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
+from nomad.datamodel.metainfo.annotations import (
+    BrowserAdaptors,
+    BrowserAnnotation,
+    ELNAnnotation,
+    ELNComponentEnum,
+)
 from nomad.datamodel.metainfo.basesections import (
     CompositeSystemReference,
     InstrumentReference,
@@ -42,6 +47,7 @@ class OpticalMicroscopyResults(ArchiveSection):
     image = Quantity(
         type=str,
         description='Microscopy image file.',
+        a_browser=BrowserAnnotation(adaptor=BrowserAdaptors.RawFileAdaptor),
     )
 
 
