@@ -1,22 +1,33 @@
-import os
+"""
+Tutorial schema package demonstrating the following NOMAD schema concepts:
+    - Quantities and sub-sections
+    - ELN annotations for user-editable quantities
+    - EntryData section for creating ELN entries
+    - Populating `archive.results` based on entry data
+    - Creating a Plotly plot from array quantities
+
+Physics example: Planck's law of blackbody radiation
+    Given the temperature T of a body, this schema computes and stores the
+    full spectral radiance profile B(λ, T). The peak wavelength is derived
+    via Wien's displacement law and written to archive.results, making the
+    entry searchable by temperature.
+
+Potential applications of this schema include:
+    - Pyrometry: inferring furnace / molten metal temperature from emission
+    - Thermal emission spectroscopy during sintering or annealing
+    - Solar cell design: matching absorption to the solar spectrum (~5778 K)
+"""
+
 from typing import TYPE_CHECKING
 
 from nomad.datamodel.data import ArchiveSection, EntryData
 from nomad.datamodel.metainfo.annotations import (
-    BrowserAdaptors,
-    BrowserAnnotation,
     ELNAnnotation,
     ELNComponentEnum,
 )
-from nomad.datamodel.metainfo.basesections import (
-    CompositeSystemReference,
-    InstrumentReference,
-    Measurement,
-)
+from nomad.datamodel.metainfo.basesections import Activity
+from nomad.datamodel.metainfo.plot import PlotlyFigure, PlotSection
 from nomad.metainfo import Quantity, SchemaPackage, Section, SubSection
-
-from nomad_parser_tutorial_exercise.util.reader import read_data_file
-from nomad_parser_tutorial_exercise.util.utils import merge_sections
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import EntryArchive
@@ -25,119 +36,151 @@ if TYPE_CHECKING:
 m_package = SchemaPackage()
 
 
-class OpticalMicroscopySettings(ArchiveSection):
+class BlackbodyResults(ArchiveSection):
     """
-    An example schema for optical microscopy measurement settings.
+    Results of the Planck spectral radiance calculation.
+
+    Stores the wavelength array, spectral radiance B(λ,T), and the peak
+    wavelength from Wien's displacement law.
     """
 
-    resolution = Quantity(
-        type=float, description='Microscopy image resolution', shape=[2]
-    )
-    magnification = Quantity(
+    temperature = Quantity(
         type=float,
-        description='Microscopy image magnification',
+        unit='K',
+        description='Temperature of the blackbody in Kelvin.',
+    )
+    wavelength = Quantity(
+        type=float,
+        shape=['*'],
+        unit='nm',
+        description='Wavelength array in nm.',
+    )
+    spectral_radiance = Quantity(
+        type=float,
+        shape=['*'],
+        unit='W sr⁻¹ m⁻³',
+        description='Spectral radiance B(λ,T) in W·sr⁻¹·m⁻³ at each wavelength.',
+    )
+    peak_wavelength = Quantity(
+        type=float,
+        unit='nm',
+        description=(
+            "Wavelength of maximum emission in nm, from Wien's displacement law: "
+            'λ_max = b / T,  b = 2.898 × 10⁻³ m·K.'
+        ),
     )
 
 
-class OpticalMicroscopyResults(ArchiveSection):
+class BlackbodyResultsPlot(BlackbodyResults, PlotSection):
     """
-    An example schema for optical microscopy measurement results.
+    Section that generates a Plotly plot of the spectral radiance profile and populates
+    `figures` subsection with JSON-serialized Plotly figure data.
+
+    The `figures` subsection comes from the PlotSection base class and is used by the
+    UI to display plots.
     """
-
-    image = Quantity(
-        type=str,
-        description='Microscopy image file.',
-        a_browser=BrowserAnnotation(adaptor=BrowserAdaptors.RawFileAdaptor),
-    )
-
-
-class OpticalMicroscopy(Measurement):
-    """
-    An example schema for optical microscopy measurements.
-    """
-
-    m_def = Section(
-        label='Example Microscopy ELN',
-    )
-
-    settings = SubSection(
-        section_def=OpticalMicroscopySettings,
-        description='Microscopy settings.',
-    )
-    results = SubSection(
-        section_def=OpticalMicroscopyResults,
-        description='Microscopy results.',
-        repeats=True,
-    )
-
-
-class OpticalMicroscopyELN(OpticalMicroscopy, EntryData):
-    """
-    An example ELN schema for optical microscopy measurements. Using `EntryData` as
-    a parent section enables this section to be used for creating NOMAD entries.
-    """
-
-    data_file = Quantity(
-        type=str,
-        description='Data file coming from the microscope.',
-        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
-    )
-
-    def write_data(self, data_dict: dict, logger: 'BoundLogger') -> None:
-        """
-        Writes the data from the provided dictionary to the quantities of the schema.
-        Uses the `merge_sections` utility function.
-
-        Args:
-            data_dict (dict): A dictionary containing the data to be written.
-            logger (BoundLogger): A structlog logger.
-        """
-        measurement = OpticalMicroscopy()
-        if datetime := data_dict.get('datetime'):
-            measurement.datetime = datetime
-
-        measurement.m_setdefault('settings')
-        if resolution := data_dict.get('resolution'):
-            measurement.settings.resolution = [float(x) for x in resolution.split('x')]
-        if magnification := data_dict.get('magnification'):
-            measurement.settings.magnification = float(magnification[:-1])
-
-        measurement.m_setdefault('results/0')
-        if image_file_name := data_dict.get('imageFileName'):
-            measurement.results[0].image = os.path.join(
-                os.path.dirname(self.data_file), image_file_name
-            )
-
-        if (
-            'sample' in data_dict
-            and isinstance(data_dict['sample'], dict)
-            and 'sample_ID' in data_dict['sample']
-        ):
-            sample = data_dict['sample']
-            self.samples = [
-                CompositeSystemReference(
-                    lab_id=sample['sample_ID'],
-                )
-            ]
-        if device_name := data_dict.get('deviceName'):
-            self.instruments = [InstrumentReference(name=device_name)]
-
-        merge_sections(self, measurement, logger=logger)
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         """
-        Redefining the `normalize` method to read the data from the provided file and
-        populate other quantities of the schema. This method is called when the entry
-        is processed.
+        Creates a Plotly line plot of B(λ, T) and marks the peak wavelength.
+        Stores the figure in `self.figures` for display in the NOMAD UI.
         """
-
         super().normalize(archive, logger)
 
-        data_dict = {}
-        if self.data_file is not None:
-            data_dict = read_data_file(self.data_file, archive, logger)
-        if data_dict:
-            self.write_data(data_dict, logger)
+        if self.wavelength is None or self.spectral_radiance is None:
+            return
+
+        from .visualize import plot_blackbody_spectrum
+
+        self.figures = [
+            PlotlyFigure(
+                label='Spectral Radiance',
+                figure=plot_blackbody_spectrum(
+                    temperature=self.temperature.to('K').magnitude,
+                    wavelength=self.wavelength.to('nm').magnitude,
+                    spectral_radiance=self.spectral_radiance.to('W sr⁻¹ m⁻³').magnitude,
+                    peak_wavelength=self.peak_wavelength.to('nm').magnitude,
+                ).to_plotly_json(),
+            )
+        ]
+
+
+class BlackbodyRadiation(Activity, EntryData):
+    """
+    ELN schema for a Planck blackbody radiation calculation.
+
+    Set a material/source name, temperature, and optional wavelength bounds.
+    The normalize method computes B(λ, T), stores the spectrum in `results`, and writes
+    the source name to `archive.results` for searchability.
+    """
+
+    m_def = Section(label="Blackbody Radiation (Planck's Law)")
+
+    name = Quantity(
+        type=str,
+        label='Source name',
+        description='Name of the emitting body, e.g. "Molten Iron" or "Solar surface".',
+        a_eln=ELNAnnotation(component=ELNComponentEnum.StringEditQuantity),
+    )
+    temperature = Quantity(
+        type=float,
+        unit='K',
+        description=(
+            'Temperature of the blackbody in Kelvin. '
+            'Examples: molten iron ≈ 1800 K, solar surface ≈ 5778 K, '
+            'hot furnace ≈ 1200 K.'
+        ),
+        a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
+    )
+    wavelength_min = Quantity(
+        type=float,
+        unit='nm',
+        description='Lower bound of the wavelength range in nm. Defaults to 100 nm.',
+        default=100.0,
+        a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
+    )
+    wavelength_max = Quantity(
+        type=float,
+        unit='nm',
+        description='Upper bound of the wavelength range in nm. Defaults to 3000 nm.',
+        default=3000.0,
+        a_eln=ELNAnnotation(component=ELNComponentEnum.NumberEditQuantity),
+    )
+    results = SubSection(
+        section_def=BlackbodyResultsPlot,
+        description='Computed spectral radiance profile and derived quantities.',
+    )
+
+    def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
+        """
+        Computes the Planck spectral radiance B(λ, T) based on user inputs, stores
+        the arrays in results, and writes the source name to `archive.results`.
+        """
+        self.method = 'Planck Spectral Radiance'
+
+        from .calculate import planck_spectrum
+
+        if self.temperature:
+            ps = planck_spectrum(
+                temperature=self.temperature.to('K').magnitude,
+                wavelength_min=self.wavelength_min.to('nm').magnitude,
+                wavelength_max=self.wavelength_max.to('nm').magnitude,
+            )
+
+            results = BlackbodyResultsPlot(
+                temperature=self.temperature,
+                wavelength=ps['wavelength'],
+                spectral_radiance=ps['spectral_radiance'],
+                peak_wavelength=ps['peak_wavelength'],
+            )
+            results.normalize(archive, logger)
+            self.results = results
+
+        if self.name:
+            archive.m_setdefault('results/material')
+            archive.results.material.material_name = self.name
+
+        super().normalize(archive, logger)
 
 
 m_package.__init_metainfo__()
