@@ -1,0 +1,5 @@
+data:
+  m_def: nomad_plugin_tutorials.schema.schema_package.BlackbodyRadiation
+  name: Molten Iron
+  temperature: 1800.0
+

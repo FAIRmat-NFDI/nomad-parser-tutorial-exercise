@@ -2,7 +2,7 @@ import logging
 
 from nomad.datamodel import EntryArchive
 
-from nomad_parser_tutorial_exercise.parsers.exercise_3.parsers.parser import (
+from nomad_plugin_tutorials.parsers.tutorial_3.parsers.parser import (
     ExampleMicroscopyParser,
 )
 
