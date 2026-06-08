@@ -90,7 +90,7 @@ class BlackbodyResultsPlot(BlackbodyResults, PlotSection):
         if self.wavelength is None or self.spectral_radiance is None:
             return
 
-        from nomad_parser_tutorial_exercise.schema_tutorial.visualize import (
+        from nomad_plugin_tutorials.schema.visualize import (
             plot_blackbody_spectrum,
         )
 
@@ -160,7 +160,7 @@ class BlackbodyRadiation(Activity, EntryData):
         """
         self.method = 'Planck Spectral Radiance'
 
-        from nomad_parser_tutorial_exercise.schema_tutorial.calculate import (
+        from nomad_plugin_tutorials.schema.calculate import (
             planck_spectrum,
         )
 

@@ -3,11 +3,11 @@ from nomad.config.models.plugins import ParserEntryPoint
 
 class ExampleMicroscopyParserEntryPoint(ParserEntryPoint):
     def load(self):
-        from nomad_parser_tutorial_exercise.exercise_3.parsers.parser import (
-            ExampleMicroscopyParser,
+        from nomad_plugin_tutorials.parsers.tutorial_2.parsers.parser import (
+            ExampleXMLParser,
         )
 
-        return ExampleMicroscopyParser(**self.model_dump())
+        return ExampleXMLParser(**self.model_dump())
 
 
 example_microscopy_parser_entry_point = ExampleMicroscopyParserEntryPoint(

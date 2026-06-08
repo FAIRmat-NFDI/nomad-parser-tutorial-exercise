@@ -12,7 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: MIT License",
 ]
-name = "nomad-parser-tutorial-exercise"
+name = "nomad-plugin-tutorial"
 description = "A NOMAD plugin containing tutorials on writing plugin entry points."
 dynamic = ["version"]
 readme = "README.md"
@@ -133,9 +133,15 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [project.entry-points.'nomad.plugin']
-schema_package_entry_point = "nomad_parser_tutorial_exercise.exercise_3.schema_packages:example_microscopy_schema_entry_point"
-parser_entry_point = "nomad_parser_tutorial_exercise.exercise_3.parsers:example_microscopy_parser_entry_point"
-schema_tutorial_entry_point = "nomad_parser_tutorial_exercise.schema_tutorial:microscopy_schema_entry_point"
+parser_tutorial_1_schema = "nomad_plugin_tutorials.parsers.tutorial_1.schema_packages:example_microscopy_schema_entry_point"
+
+parser_tutorial_2_schema = "nomad_plugin_tutorials.parsers.tutorial_2.schema_packages:example_microscopy_schema_entry_point"
+parser_tutorial_2_parser = "nomad_plugin_tutorials.parsers.tutorial_2.parsers:example_microscopy_parser_entry_point"
+
+parser_tutorial_3_schema = "nomad_plugin_tutorials.parsers.tutorial_3.schema_packages:example_microscopy_schema_entry_point"
+parser_tutorial_3_parser = "nomad_plugin_tutorials.parsers.tutorial_3.parsers:example_microscopy_parser_entry_point"
+
+schema_tutorial = "nomad_plugin_tutorials.schema:blackbody_radiation"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues

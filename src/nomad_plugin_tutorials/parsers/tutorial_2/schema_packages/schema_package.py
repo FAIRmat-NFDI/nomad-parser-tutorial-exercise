@@ -22,7 +22,7 @@ from nomad.datamodel.data import EntryDataCategory, Schema
 from nomad.datamodel.metainfo.annotations import ELNAnnotation, ELNComponentEnum
 from nomad.metainfo import Quantity, SchemaPackage, Section
 
-from nomad_parser_tutorial_exercise.util.utils import merge_sections
+from nomad_plugin_tutorials.parsers.utils import merge_sections
 
 m_package = SchemaPackage()
 
@@ -86,9 +86,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from nomad_parser_tutorial_exercise.util.reader import (
-            read_data_file,
-        )
+        from nomad_plugin_tutorials.parsers.reader import read_data_file
 
         if self.metadata_file is not None:
             data_dict_full = read_data_file(self.metadata_file, archive, logger)  # type: ignore

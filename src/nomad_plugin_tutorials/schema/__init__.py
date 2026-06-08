@@ -10,16 +10,16 @@ Read further in the NOMAD documentation: https://nomad-lab.eu/prod/v1/docs/
 from nomad.config.models.plugins import SchemaPackageEntryPoint
 
 
-class MicroscopySchemaEntryPoint(SchemaPackageEntryPoint):
+class BlackbodyRadiationSchemaEntryPoint(SchemaPackageEntryPoint):
     def load(self):
-        from nomad_parser_tutorial_exercise.schema_tutorial.schema_package import (
+        from nomad_plugin_tutorials.schema.schema_package import (
             m_package,
         )
 
         return m_package
 
 
-microscopy_schema_entry_point = MicroscopySchemaEntryPoint(
-    name='Microscopy Schema',
-    description='Example microscopy schema package entry point.',
+blackbody_radiation = BlackbodyRadiationSchemaEntryPoint(
+    name="Blackbody Radiation Schema",
+    description="Example blackbody radiation schema package entry point.",
 )
