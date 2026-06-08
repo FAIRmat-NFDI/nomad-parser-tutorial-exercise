@@ -9,7 +9,7 @@ Tutorial schema package demonstrating the following NOMAD schema concepts:
 Physics example: Planck's law of blackbody radiation
     Given the temperature T of a body, this schema computes and stores the
     full spectral radiance profile B(λ, T). The peak wavelength is derived
-    via Wien's displacement law and written to archive.results, making the
+    via Wien's displacement law and written to `archive.results`, making the
     entry searchable by temperature.
 
 Potential applications of this schema include:
@@ -90,7 +90,9 @@ class BlackbodyResultsPlot(BlackbodyResults, PlotSection):
         if self.wavelength is None or self.spectral_radiance is None:
             return
 
-        from .visualize import plot_blackbody_spectrum
+        from nomad_parser_tutorial_exercise.schema_tutorial.visualize import (
+            plot_blackbody_spectrum,
+        )
 
         self.figures = [
             PlotlyFigure(
@@ -158,7 +160,9 @@ class BlackbodyRadiation(Activity, EntryData):
         """
         self.method = 'Planck Spectral Radiance'
 
-        from .calculate import planck_spectrum
+        from nomad_parser_tutorial_exercise.schema_tutorial.calculate import (
+            planck_spectrum,
+        )
 
         if self.temperature:
             ps = planck_spectrum(
@@ -175,6 +179,11 @@ class BlackbodyRadiation(Activity, EntryData):
             )
             results.normalize(archive, logger)
             self.results = results
+        else:
+            logger.warning(
+                'Temperature not provided; skipping Planck spectrum calculation.'
+            )
+            self.results = None
 
         if self.name:
             archive.m_setdefault('results/material')
