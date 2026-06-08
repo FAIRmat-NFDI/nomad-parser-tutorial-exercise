@@ -13,8 +13,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 name = "nomad-parser-tutorial-exercise"
-description = "repository for parser tutorial examples"
-version = "0.1.0"
+description = "A NOMAD plugin containing tutorials on writing plugin entry points."
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -28,13 +28,13 @@ maintainers = [
 ]
 license = { file = "LICENSE" }
 dependencies = [
-    "nomad-lab>=1.4.1",
+    "nomad-lab>=1.4.2",
     "numpy",
     "plotly",
 ]
 
 [project.urls]
-Repository = "https://github.com/GinzburgLev/nomad-parser-tutorial-exercise"
+Repository = "https://github.com/FAIRmat-NFDI/nomad-plugin-tutorial"
 
 [project.optional-dependencies]
 dev = [
@@ -140,3 +140,5 @@ schema_tutorial_entry_point = "nomad_parser_tutorial_exercise.schema_tutorial:mi
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues
 skip = [".github/*"]
+
+[tool.setuptools_scm]
