@@ -64,7 +64,7 @@ class ExampleMicroscopyMeasurement(ELNMeasurement):
     )
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
-        from nomad_parser_tutorial_exercise.util.reader import read_data_file
+        from nomad_plugin_tutorials.parsers.reader import read_data_file
 
         super().normalize(archive, logger)
 

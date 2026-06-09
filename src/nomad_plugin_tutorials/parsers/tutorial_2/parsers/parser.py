@@ -2,7 +2,7 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from nomad_parser_tutorial_exercise.util.utils import create_archive
+from nomad_plugin_tutorials.parsers.utils import create_archive
 
 if TYPE_CHECKING:
     from nomad.datamodel.datamodel import (
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 from nomad.parsing.parser import MatchingParser
 
-from nomad_parser_tutorial_exercise.exercise_2.schema_packages.schema_package import (
+from nomad_plugin_tutorials.parsers.tutorial_2.schema_packages.schema_package import (
     ExampleMicroscopyMeasurement,
     RawFileData,
 )

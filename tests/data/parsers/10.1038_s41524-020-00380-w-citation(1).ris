@@ -1,0 +1,21 @@
+TY  - JOUR
+AU  - Taherimakhsousi, Nina
+AU  - MacLeod, Benjamin P.
+AU  - Parlane, Fraser G. L.
+AU  - Morrissey, Thomas D.
+AU  - Booker, Edward P.
+AU  - Dettelbach, Kevan E.
+AU  - Berlinguette, Curtis P.
+PY  - 2020
+DA  - 2020/07/29
+TI  - Quantifying defects in thin films using machine vision
+JO  - npj Computational Materials
+SP  - 111
+VL  - 6
+IS  - 1
+AB  - The sensitivity of thin-film materials and devices to defects motivates extensive research into the optimization of film morphology. This research could be accelerated by automated experiments that characterize the response of film morphology to synthesis conditions. Optical imaging can resolve morphological defects in thin films and is readily integrated into automated experiments but the large volumes of images produced by such systems require automated analysis. Existing approaches to automatically analyzing film morphologies in optical images require application-specific customization by software experts and are not robust to changes in image content or imaging conditions. Here, we present a versatile convolutional neural network (CNN) for thin-film image analysis which can identify and quantify the extent of a variety of defects and is applicable to multiple materials and imaging conditions. This CNN is readily adapted to new thin-film image analysis tasks and will facilitate the use of imaging in automated thin-film research systems.
+SN  - 2057-3960
+UR  - https://doi.org/10.1038/s41524-020-00380-w
+DO  - 10.1038/s41524-020-00380-w
+ID  - Taherimakhsousi2020
+ER  - 
