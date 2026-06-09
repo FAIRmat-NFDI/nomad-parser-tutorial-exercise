@@ -4,12 +4,12 @@ import math
 from nomad.datamodel import EntryArchive
 
 from nomad_plugin_tutorials.parsers.tutorial_3.parsers.parser import (
-    ExampleMicroscopyParser,
+    OpticalMicroscopyParser,
 )
 
 
 def test_parse_file():
-    parser = ExampleMicroscopyParser()
+    parser = OpticalMicroscopyParser()
     archive = EntryArchive()
     parser.parse('tests/data/parsers/example.xml', archive, logging.getLogger())
 

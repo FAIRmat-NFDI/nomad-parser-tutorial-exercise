@@ -1,71 +1,44 @@
+import os
 from typing import (
     TYPE_CHECKING,
 )
 
-if TYPE_CHECKING:
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
-    from structlog.stdlib import (
-        BoundLogger,
-    )
-
-from nomad.datamodel.metainfo.basesections.v1 import (
-    CompositeSystemReference,
-    InstrumentReference,
-)
-from nomad.parsing.file_parser.mapping_parser import XMLParser
 from nomad.parsing.parser import MatchingParser
 
+from nomad_plugin_tutorials.parsers.reader import read_data_file
 from nomad_plugin_tutorials.parsers.tutorial_3.schema.schema_package import (
-    ExampleMicroscopyMeasurement,
+    OpticalMicroscopy,
 )
 
+if TYPE_CHECKING:
+    from nomad.datamodel.datamodel import EntryArchive
 
-class ExampleMicroscopyParser(MatchingParser):
+
+class OpticalMicroscopyParser(MatchingParser):
     def parse(
-        self,
-        mainfile: str,
-        archive: 'EntryArchive',
-        logger: 'BoundLogger' = None,  # pyright: ignore[reportArgumentType]
-        child_archives: dict[str, 'EntryArchive'] = None,  # pyright: ignore[reportArgumentType]
+        self, mainfile: str, archive: 'EntryArchive', logger=None, child_archives=None
     ) -> None:
-        data_dict_full = XMLParser(filepath=mainfile).to_dict()
-        data_dict = data_dict_full.get('image_metadata', {})
+        data_file = mainfile.rsplit('/raw/', maxsplit=1)[-1]
 
-        entry_data_section = ExampleMicroscopyMeasurement(
-            metadata_file=mainfile.rsplit('/raw/', maxsplit=1)[-1]
-        )
-        if not (isinstance(data_dict, dict) and data_dict.get('@type') == 'microscopy'):
-            logger.warning('Unexpected structure of the xml file')
-            return
-
-        if 'resolution' in data_dict:
-            entry_data_section.resolution = [
-                float(x) for x in data_dict['resolution'].split('x')
-            ]
-        if 'magnification' in data_dict:
-            entry_data_section.magnification = float(data_dict['magnification'][:-1])
+        data_dict = read_data_file(data_file, archive, logger)
+        measurement = OpticalMicroscopy(data_file=data_file)
+        if datetime := data_dict.get('datetime'):
+            measurement.datetime = datetime
         if (
             'sample' in data_dict
             and isinstance(data_dict['sample'], dict)
             and 'sample_ID' in data_dict['sample']
         ):
-            sample = data_dict['sample']
-            entry_data_section.samples = [
-                CompositeSystemReference(
-                    lab_id=sample['sample_ID'],
-                )
-            ]
-        if 'deviceName' in data_dict:
-            entry_data_section.instruments = [
-                InstrumentReference(
-                    name=data_dict['deviceName'],
-                )
-            ]
-        if 'datetime' in data_dict:
-            entry_data_section.datetime = data_dict['datetime']
-        if 'imageFileName' in data_dict:
-            entry_data_section.image_file = data_dict['imageFileName']
+            measurement.sample_id = data_dict['sample']['sample_ID']
 
-        archive.data = entry_data_section
+        if resolution := data_dict.get('resolution'):
+            measurement.resolution = [float(x) for x in resolution.split('x')]
+        if magnification := data_dict.get('magnification'):
+            measurement.magnification = float(magnification[:-1])
+
+        if image_file_name := data_dict.get('imageFileName'):
+            measurement.image = os.path.join(
+                os.path.dirname(data_file), image_file_name
+            )
+
+        archive.data = measurement
