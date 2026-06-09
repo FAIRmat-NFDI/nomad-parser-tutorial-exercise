@@ -17,7 +17,7 @@ from nomad.datamodel.metainfo.basesections.v1 import (
 from nomad.parsing.file_parser.mapping_parser import XMLParser
 from nomad.parsing.parser import MatchingParser
 
-from nomad_plugin_tutorials.parsers.tutorial_3.schema_packages.schema_package import (
+from nomad_plugin_tutorials.parsers.tutorial_3.schema.schema_package import (
     ExampleMicroscopyMeasurement,
 )
 

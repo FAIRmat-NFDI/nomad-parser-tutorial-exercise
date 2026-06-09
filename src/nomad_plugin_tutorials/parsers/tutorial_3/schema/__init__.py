@@ -3,7 +3,7 @@ from nomad.config.models.plugins import SchemaPackageEntryPoint
 
 class ExampleMicroscopySchemaEntryPoint(SchemaPackageEntryPoint):
     def load(self):
-        from nomad_plugin_tutorials.parsers.tutorial_3.schema_packages.schema_package import (
+        from nomad_plugin_tutorials.parsers.tutorial_3.schema.schema_package import (
             m_package,
         )
 

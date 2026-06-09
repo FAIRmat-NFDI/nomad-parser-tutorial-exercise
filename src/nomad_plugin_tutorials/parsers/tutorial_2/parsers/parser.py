@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 from nomad.parsing.parser import MatchingParser
 
-from nomad_plugin_tutorials.parsers.tutorial_2.schema_packages.schema_package import (
+from nomad_plugin_tutorials.parsers.tutorial_2.schema.schema_package import (
     ExampleMicroscopyMeasurement,
     RawFileData,
 )
