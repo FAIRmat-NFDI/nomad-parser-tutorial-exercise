@@ -50,6 +50,6 @@ def read_data_file(
         if not data_dict.get('@type') == 'microscopy':
             raise ValueError('Unexpected structure of the data file.')
     except Exception as e:
-        logger.error(f'Failed to parse "{filepath}": {e}', exec_info=True)
+        logger.error(f'Failed to parse "{filepath}": {e}', exc_info=True)
         return {}
     return data_dict
