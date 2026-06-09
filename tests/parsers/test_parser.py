@@ -1,17 +1,9 @@
-import logging
 import math
 
-from nomad.datamodel import EntryArchive
-
-from nomad_plugin_tutorials.parsers.tutorial_3.parsers.parser import (
-    OpticalMicroscopyParser,
-)
-
+from nomad.client import parse
 
 def test_parse_file():
-    parser = OpticalMicroscopyParser()
-    archive = EntryArchive()
-    parser.parse('tests/data/parsers/example.xml', archive, logging.getLogger())
+    archive = parse('tests/data/parsers/example.xml')[0]
 
     assert math.isclose(archive.data.magnification, 5.0, rel_tol=1e-9)
 
