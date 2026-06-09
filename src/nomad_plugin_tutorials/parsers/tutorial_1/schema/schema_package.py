@@ -136,6 +136,4 @@ class OpticalMicroscopy(EntryData):
             self.write_data(data_dict, logger)
 
 
-
-
 m_package.__init_metainfo__()
