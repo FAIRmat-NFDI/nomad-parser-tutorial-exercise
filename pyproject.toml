@@ -135,8 +135,8 @@ where = ["src"]
 [project.entry-points.'nomad.plugin']
 # parser_tutorial_1_schema = "nomad_plugin_tutorials.parsers.tutorial_1.schema:example_microscopy_schema_entry_point"
 
-# parser_tutorial_2_schema = "nomad_plugin_tutorials.parsers.tutorial_2.schema:example_microscopy_schema_entry_point"
-# parser_tutorial_2_parser = "nomad_plugin_tutorials.parsers.tutorial_2.parsers:example_microscopy_parser_entry_point"
+# parser_tutorial_2_schema = "nomad_plugin_tutorials.parsers.tutorial_2.schema:microscopy"
+# parser_tutorial_2_parser = "nomad_plugin_tutorials.parsers.tutorial_2.parsers:microscopy"
 
 parser_tutorial_3_schema = "nomad_plugin_tutorials.parsers.tutorial_3.schema:microscopy"
 parser_tutorial_3_parser = "nomad_plugin_tutorials.parsers.tutorial_3.parsers:microscopy"
