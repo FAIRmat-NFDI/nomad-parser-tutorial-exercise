@@ -2,13 +2,13 @@ import os
 from typing import TYPE_CHECKING
 
 from nomad.datamodel.data import EntryData, EntryDataCategory
-from nomad.metainfo import Datetime
 from nomad.datamodel.metainfo.annotations import (
     BrowserAdaptors,
     BrowserAnnotation,
     ELNAnnotation,
     ELNComponentEnum,
 )
+from nomad.metainfo import Datetime
 from nomad.metainfo.metainfo import (
     Category,
     Quantity,
