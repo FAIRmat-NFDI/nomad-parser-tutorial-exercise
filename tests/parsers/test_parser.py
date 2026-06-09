@@ -2,6 +2,7 @@ import math
 
 from nomad.client import parse
 
+
 def test_parse_file():
     archive = parse('tests/data/parsers/example.xml')[0]
 
