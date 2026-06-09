@@ -133,7 +133,7 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [project.entry-points.'nomad.plugin']
-# parser_tutorial_1_schema = "nomad_plugin_tutorials.parsers.tutorial_1.schema:example_microscopy_schema_entry_point"
+# parser_tutorial_1_schema = "nomad_plugin_tutorials.parsers.tutorial_1.schema:microscopy"
 
 # parser_tutorial_2_schema = "nomad_plugin_tutorials.parsers.tutorial_2.schema:microscopy"
 # parser_tutorial_2_parser = "nomad_plugin_tutorials.parsers.tutorial_2.parsers:microscopy"
