@@ -1,121 +1,94 @@
-# example_plugin_tutorial
+# nomad-plugin-tutorials
 
-repository for parser tutorial examples
+This repo contains tutorials for learning how to develop NOMAD plugin entry
+points. We recommend using it in conjunction with the
+[Tutorial documentation on plugin development](https://fairmat-nfdi.github.io/nomad-docs/tutorial/develop_plugin).
 
-This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+## Getting Started
 
-## Development
+To go through the tutorials in this repo, start with cloning it on your local:
 
-If you want to develop locally this plugin, clone the project and in the plugin folder, create a virtual environment (you can use Python 3.10, 3.11 or 3.12):
 ```sh
-git clone https://github.com/GinzburgLev/example_plugin_tutorial.git
-cd example_plugin_tutorial
-python3.11 -m venv .pyenv
-. .pyenv/bin/activate
+git clone git@github.com:FAIRmat-NFDI/nomad-plugin-tutorials.git
+cd nomad-plugin-tutorials
 ```
 
-Make sure to have `pip` upgraded:
+Next step, install the package in editable mode along with its development
+dependencies in a virtual Python environment (Python>=3.10).
+
+Installation with [uv](https://docs.astral.sh/uv/) (recommended):
 ```sh
+uv sync --extra dev
+. .venv/bin/activate
+```
+
+Installation with pip:
+```sh
+python3.12 -m venv .venv
+. .venv/bin/activate
 pip install --upgrade pip
+pip install -e '.[dev]'
 ```
 
-We recommend installing `uv` for fast pip installation of the packages:
+## Tutorial mode
+
+Some tutorials offer code-along exercises where the user needs to implement
+missing code snippets. To access this _"tutorial mode"_ version of code, switch
+to the `tutorial-mode` branch. The `main` branch has fully operational code
+that can be used as ground truth for these exercises. Use git-checkout to switch
+branches:
+
 ```sh
-pip install uv
+git checkout tutorial-mode  # to switch to tutorial-mode branch
 ```
 
-Install the `nomad-lab` package:
+## Directory structure
+
 ```sh
-uv pip install -e '.[dev]'
+src
+└── nomad_plugin_tutorials
+    ├── schema                # Tutorial for Schema entry point
+    │   ├── __init__.py
+    │   ├── schema_package.py
+    │   ├── tutorial.ipynb
+    │   ├── calculate.py
+    │   └── visualize.py
+    └── parsers               # Three tutorials for Parser entry point
+        ├── tutorial_1/       # - Use Matching Parser to create a non-editable entry
+        ├── tutorial_2/       # - Manually create an editable entry that parses data file
+        ├── tutorial_3/       # - Use Matching Parser to create an editable entry that parses data file
+        ├── reader.py
+        ├── utils.py
+        └── data/             # Example data files for parsing
 ```
 
-### Run the tests
+## Switching entry points for Parser tutorials
 
-You can run locally the tests:
-```sh
-python -m pytest -sv tests
+When using the repo in _"tutorial mode"_, you might need to test if your code
+snippets are working as expected. To test the code, the corresponding plugin
+entry point should be made available in the environment through
+`pyproject.toml`.
+
+By default the entry point for schema tutorial and parser tutorial 1 are
+available. When working on one of the parser tutorials, add the corresponding entry point while commenting out others in `pyproject.toml`. For example, here's how `pyproject.toml` should look like when working with parser tutorial 3:
+
+```toml
+# pyproject.toml
+
+[project.entry-points.'nomad.plugin']
+# parser_tutorial_1_schema = "nomad_plugin_tutorials.parsers.tutorial_1.schema:microscopy"
+# parser_tutorial_1_parser = "nomad_plugin_tutorials.parsers.tutorial_1.parsers:microscopy"
+
+# parser_tutorial_2_schema = "nomad_plugin_tutorials.parsers.tutorial_2.schema:microscopy"
+
+parser_tutorial_3_schema = "nomad_plugin_tutorials.parsers.tutorial_3.schema:microscopy"
+parser_tutorial_3_parser = "nomad_plugin_tutorials.parsers.tutorial_3.parsers:microscopy"
+...
 ```
-
-where the `-s` and `-v` options toggle the output verbosity.
-
-Our CI/CD pipeline produces a more comprehensive test report using the `pytest-cov` package. You can generate a local coverage report:
-```sh
-uv pip install pytest-cov
-python -m pytest --cov=src tests
-```
-
-### Run linting and auto-formatting
-
-We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code. Ruff auto-formatting is also a part of the GitHub workflow actions. You can run locally:
-```sh
-ruff check .
-ruff format . --check
-```
-
-### Debugging
-
-For interactive debugging of the tests, use `pytest` with the `--pdb` flag. We recommend using an IDE for debugging, e.g., _VSCode_. If that is the case, add the following snippet to your `.vscode/launch.json`:
-```json
-{
-  "configurations": [
-      {
-        "name": "<descriptive tag>",
-        "type": "debugpy",
-        "request": "launch",
-        "cwd": "${workspaceFolder}",
-        "program": "${workspaceFolder}/.pyenv/bin/pytest",
-        "justMyCode": true,
-        "env": {
-            "_PYTEST_RAISE": "1"
-        },
-        "args": [
-            "-sv",
-            "--pdb",
-            "<path-to-plugin-tests>",
-        ]
-    }
-  ]
-}
-```
-
-where `<path-to-plugin-tests>` must be changed to the local path to the test module to be debugged.
-
-The settings configuration file `.vscode/settings.json` automatically applies the linting and formatting upon saving the modified file.
-
-### Documentation on Github pages
-
-To view the documentation locally, install the related packages using:
-```sh
-uv pip install -r requirements_docs.txt
-```
-
-Run the documentation server:
-```sh
-mkdocs serve
-```
-
-## Adding this plugin to NOMAD
-
-Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
-1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
-2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
-
-### Adding this plugin in your NOMAD Oasis
-
-Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
-
-### Adding this plugin in your local NOMAD installation and the source code of NOMAD
-
-We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
-
-## Publish note
-In the [GitHub actions workflow](./.github/workflows/publish.yml) for publishing the example_plugin_tutorial plugin to PyPI, we commented out the `deploy` job . If you want to publish the plugin to `PyPI`, you need to set up your project in `PyPI`. There are several online tutorials on publishing a Python package to PyPI, e.g., [How to Publish a Python Package to PyPI](https://realpython.com/pypi-publish-python-package/). After that, you can uncomment the `deploy` job in the workflow file and push the changes to GitHub. The workflow will be triggered and the package will be published to `PyPI` when you create a new release on GitHub.
-
-### Template update
-
-We use [`cruft`](https://github.com/cruft/cruft) to update the project based on template changes. To run the check for updates locally, run `cruft update` in the root of the project. More details see the instructions on [`cruft` website](https://cruft.github.io/cruft/#updating-a-project).
 
 ## Main contributors
+
 | Name | E-mail     |
 |------|------------|
 | Lev Ginzburg | [lev.ginzburg@physik.hu-berlin.de](mailto:lev.ginzburg@physik.hu-berlin.de)
+| Sarthak Kapoor | [sarthak.kapoor@physik.hu-berlin.de](mailto:sarthak.kapoor@physik.hu-berlin.de)
