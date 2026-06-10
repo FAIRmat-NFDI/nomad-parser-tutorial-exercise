@@ -11,7 +11,7 @@ class OpticalMicroscopy(EntryData):
     """
 
     m_def = Section(
-        label='Optical Microscopy',
+        label='Optical Microscopy (Parser Tutorial 3)',
     )
     data_file = Quantity(
         type=str,

@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
-from nomad.datamodel.data import EntryData, EntryDataCategory
+from nomad.datamodel.data import EntryData
 from nomad.datamodel.metainfo.annotations import (
     BrowserAdaptors,
     BrowserAnnotation,
@@ -10,7 +10,6 @@ from nomad.datamodel.metainfo.annotations import (
 )
 from nomad.metainfo import Datetime
 from nomad.metainfo.metainfo import (
-    Category,
     Quantity,
     SchemaPackage,
     Section,
@@ -26,13 +25,6 @@ if TYPE_CHECKING:
 m_package = SchemaPackage()
 
 
-class TutorialCategory(EntryDataCategory):
-    """
-    A category for all measurements defined in the example nomad plugin.
-    """
-
-    m_def = Category(label='Plugin Tutorial', categories=[EntryDataCategory])
-
 
 class OpticalMicroscopy(EntryData):
     """
@@ -41,7 +33,7 @@ class OpticalMicroscopy(EntryData):
     """
 
     m_def = Section(
-        label='Optical Microscopy',
+        label='Optical Microscopy (Parser Tutorial 1)',
     )
     data_file = Quantity(
         type=str,

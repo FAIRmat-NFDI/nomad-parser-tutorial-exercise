@@ -41,7 +41,7 @@ class OpticalMicroscopy(EntryData):
     """
 
     m_def = Section(
-        label='Optical Microscopy',
+        label='Optical Microscopy (Parser Tutorial 2)',
     )
     data_file = Quantity(
         type=str,
@@ -143,6 +143,7 @@ class RawFileOpticalMicroscopy(EntryData):
     """
     Section for storing a directly parsed raw data file.
     """
+    m_def = Section(label="Raw File Optical Microscopy (Parser Tutorial 2)")
 
     measurement = Quantity(
         type=OpticalMicroscopy,
