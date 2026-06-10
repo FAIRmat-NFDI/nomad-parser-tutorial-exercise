@@ -25,7 +25,6 @@ if TYPE_CHECKING:
 m_package = SchemaPackage()
 
 
-
 class OpticalMicroscopy(EntryData):
     """
     An example ELN schema for optical microscopy measurements. Using `EntryData` as
