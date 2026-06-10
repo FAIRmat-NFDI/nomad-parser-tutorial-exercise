@@ -25,15 +25,12 @@ class OpticalMicroscopyParser(MatchingParser):
     def parse(
         self, mainfile: str, archive: 'EntryArchive', logger=None, child_archives=None
     ) -> None:
-        filename = mainfile.rsplit('/', maxsplit=1)[-1]
-        name = filename.split('.')[0]
-        logger.info(f' Example XML Parser called {filename}')
+        data_file = mainfile.rsplit('/raw/', maxsplit=1)[-1]
+        logger.info(f' Example XML Parser called {data_file}')
 
-        measurement_entry = OpticalMicroscopy(data_file=filename)
-
-        archive.data = RawFileOpticalMicroscopy(
-            measurement=create_archive(
-                measurement_entry, archive, f'{name}.archive.json'
-            )
+        measurement = OpticalMicroscopy(data_file=data_file)
+        measurement_entry_archive = create_archive(
+            measurement, archive, data_file.replace('.xml', '.archive.json')
         )
-        archive.metadata.entry_name = f'{name} data file'
+
+        archive.data = RawFileOpticalMicroscopy(measurement=measurement_entry_archive)

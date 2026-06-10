@@ -19,8 +19,8 @@ class OpticalMicroscopyParser(MatchingParser):
         self, mainfile: str, archive: 'EntryArchive', logger=None, child_archives=None
     ) -> None:
         data_file = mainfile.rsplit('/raw/', maxsplit=1)[-1]
-
         data_dict = read_data_file(data_file, archive, logger)
+
         measurement = OpticalMicroscopy(data_file=data_file)
         if datetime := data_dict.get('datetime'):
             measurement.datetime = datetime
