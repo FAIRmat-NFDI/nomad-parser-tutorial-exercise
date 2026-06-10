@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
-from nomad.datamodel.data import EntryData, EntryDataCategory
+from nomad.datamodel.data import EntryData
 from nomad.datamodel.metainfo.annotations import (
     BrowserAdaptors,
     BrowserAnnotation,
@@ -10,7 +10,6 @@ from nomad.datamodel.metainfo.annotations import (
 )
 from nomad.metainfo import Datetime
 from nomad.metainfo.metainfo import (
-    Category,
     Quantity,
     SchemaPackage,
     Section,
@@ -24,14 +23,6 @@ if TYPE_CHECKING:
     from structlog.stdlib import BoundLogger
 
 m_package = SchemaPackage()
-
-
-class TutorialCategory(EntryDataCategory):
-    """
-    A category for all measurements defined in the example nomad plugin.
-    """
-
-    m_def = Category(label='Plugin Tutorial', categories=[EntryDataCategory])
 
 
 class OpticalMicroscopy(EntryData):
@@ -137,20 +128,6 @@ class OpticalMicroscopy(EntryData):
             data_dict = read_data_file(self.data_file, archive, logger)
         if data_dict:
             self.write_data(data_dict, logger)
-
-
-class RawFileOpticalMicroscopy(EntryData):
-    """
-    Section for storing a directly parsed raw data file.
-    """
-
-    m_def = Section(label='Raw File Optical Microscopy (Parser Tutorial 2)')
-
-    measurement = Quantity(
-        type=OpticalMicroscopy,
-        description='A reference to the optical microscopy entry that was '
-        'generated from this data.',
-    )
 
 
 m_package.__init_metainfo__()
