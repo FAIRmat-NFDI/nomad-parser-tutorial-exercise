@@ -30,6 +30,8 @@ class OpticalMicroscopyParser(MatchingParser):
             and 'sample_ID' in data_dict['sample']
         ):
             measurement.sample_id = data_dict['sample']['sample_ID']
+            if 'description' in data_dict['sample']:
+                measurement.description = data_dict['sample']['description']
 
         if resolution := data_dict.get('resolution'):
             measurement.resolution = [float(x) for x in resolution.split('x')]

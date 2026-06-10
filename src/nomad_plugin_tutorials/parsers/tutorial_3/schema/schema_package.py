@@ -26,6 +26,10 @@ class OpticalMicroscopy(EntryData):
         type=str,
         description='Identifier for the sample used in the measurement.',
     )
+    description = Quantity(
+        type=str,
+        description='Any information that cannot be captured in the other fields.',
+    )
 
     # measurement settings
     resolution = Quantity(

@@ -92,7 +92,8 @@ class OpticalMicroscopy(EntryData):
     def write_data(self, data_dict: dict, logger: 'BoundLogger') -> None:
         """
         Writes the data from the provided dictionary to the quantities of the schema.
-        Uses the `merge_sections` utility function.
+        Uses the `merge_sections` utility function to merge the data coming from data
+        file and that coming from the user's interaction with ELN quantities.
 
         Args:
             data_dict (dict): A dictionary containing the data to be written.
@@ -107,6 +108,8 @@ class OpticalMicroscopy(EntryData):
             and 'sample_ID' in data_dict['sample']
         ):
             self.sample_id = data_dict['sample']['sample_ID']
+            if 'description' in data_dict['sample']:
+                self.description = data_dict['sample']['description']
 
         if resolution := data_dict.get('resolution'):
             measurement.resolution = [float(x) for x in resolution.split('x')]
