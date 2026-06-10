@@ -2,6 +2,7 @@
 Tutorial schema package demonstrating the following NOMAD schema concepts:
     - Quantities and sub-sections
     - ELN annotations for user-editable quantities
+    - Using basesections as a standardized starting point for schema
     - EntryData section for creating ELN entries
     - Populating `archive.results` based on entry data
     - Creating a Plotly plot from array quantities
@@ -9,13 +10,8 @@ Tutorial schema package demonstrating the following NOMAD schema concepts:
 Physics example: Planck's law of blackbody radiation
     Given the temperature T of a body, this schema computes and stores the
     full spectral radiance profile B(λ, T). The peak wavelength is derived
-    via Wien's displacement law and written to `archive.results`, making the
-    entry searchable by temperature.
-
-Potential applications of this schema include:
-    - Pyrometry: inferring furnace / molten metal temperature from emission
-    - Thermal emission spectroscopy during sintering or annealing
-    - Solar cell design: matching absorption to the solar spectrum (~5778 K)
+    via Wien's displacement law. A plot is also generated automatically based
+    on the profile.
 """
 
 from typing import TYPE_CHECKING

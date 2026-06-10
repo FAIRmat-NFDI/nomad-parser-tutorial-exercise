@@ -20,6 +20,6 @@ class BlackbodyRadiationSchemaEntryPoint(SchemaPackageEntryPoint):
 
 
 blackbody_radiation = BlackbodyRadiationSchemaEntryPoint(
-    name="Blackbody Radiation Schema",
-    description="Example blackbody radiation schema package entry point.",
+    name='Blackbody Radiation Schema',
+    description='Example blackbody radiation schema package entry point.',
 )
