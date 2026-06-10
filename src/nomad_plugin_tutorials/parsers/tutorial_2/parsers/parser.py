@@ -18,19 +18,19 @@ class OpticalMicroscopyParser(MatchingParser):
     `RawFileOpticalMicroscopy` and `OpticalMicroscopy` ELN entries.
 
     `RawFileOpticalMicroscopy` is the main archive linked to the data file, whereas
-    `OpticalMicroscopy` ELN is an additional entry linked to an `{name}.archive.json`
-    file.
+    `OpticalMicroscopy` ELN is an additional entry linked to an
+    `{data_file_path}.archive.json` file.
     """
 
     def parse(
         self, mainfile: str, archive: 'EntryArchive', logger=None, child_archives=None
     ) -> None:
-        data_file = mainfile.rsplit('/raw/', maxsplit=1)[-1]
-        logger.info(f' Example XML Parser called {data_file}')
+        data_file_path = mainfile.rsplit('/raw/', maxsplit=1)[-1]
+        logger.info(f' Example XML Parser called {data_file_path}')
 
-        measurement = OpticalMicroscopy(data_file=data_file)
+        measurement = OpticalMicroscopy(data_file=data_file_path)
         measurement_entry_archive = create_archive(
-            measurement, archive, data_file.replace('.xml', '.archive.json')
+            measurement, archive, data_file_path.replace('.xml', '.archive.json')
         )
 
         archive.data = RawFileOpticalMicroscopy(measurement=measurement_entry_archive)

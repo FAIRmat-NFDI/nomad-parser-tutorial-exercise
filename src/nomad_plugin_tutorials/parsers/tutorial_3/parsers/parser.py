@@ -18,10 +18,10 @@ class OpticalMicroscopyParser(MatchingParser):
     def parse(
         self, mainfile: str, archive: 'EntryArchive', logger=None, child_archives=None
     ) -> None:
-        data_file = mainfile.rsplit('/raw/', maxsplit=1)[-1]
-        data_dict = read_data_file(data_file, archive, logger)
+        data_file_path = mainfile.rsplit('/raw/', maxsplit=1)[-1]
+        data_dict = read_data_file(data_file_path, archive, logger)
 
-        measurement = OpticalMicroscopy(data_file=data_file)
+        measurement = OpticalMicroscopy(data_file=data_file_path)
         if datetime := data_dict.get('datetime'):
             measurement.datetime = datetime
         if (
@@ -38,7 +38,7 @@ class OpticalMicroscopyParser(MatchingParser):
 
         if image_file_name := data_dict.get('imageFileName'):
             measurement.image = os.path.join(
-                os.path.dirname(data_file), image_file_name
+                os.path.dirname(data_file_path), image_file_name
             )
 
         archive.data = measurement
