@@ -29,17 +29,20 @@ class OpticalMicroscopyParser(MatchingParser):
             and isinstance(data_dict['sample'], dict)
             and 'sample_ID' in data_dict['sample']
         ):
-            measurement.sample_id = data_dict['sample']['sample_ID']
+            measurement.m_setdefault('samples/0')
+            measurement.samples[0].lab_id = data_dict['sample']['sample_ID']
             if 'description' in data_dict['sample']:
                 measurement.description = data_dict['sample']['description']
 
+        measurement.m_setdefault('settings')
         if resolution := data_dict.get('resolution'):
             measurement.resolution = [float(x) for x in resolution.split('x')]
         if magnification := data_dict.get('magnification'):
             measurement.magnification = float(magnification[:-1])
 
+        measurement.m_setdefault('results/0')
         if image_file_name := data_dict.get('imageFileName'):
-            measurement.image = os.path.join(
+            measurement.results[0].image = os.path.join(
                 os.path.dirname(data_file_path), image_file_name
             )
 
