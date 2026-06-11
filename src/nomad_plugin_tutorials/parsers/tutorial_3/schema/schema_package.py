@@ -115,4 +115,18 @@ class OpticalMicroscopy(Measurement, EntryData):
             self.write_data(data_dict, logger)
 
 
+class RawFileOpticalMicroscopy(EntryData):
+    """
+    Section for storing a directly parsed raw data file.
+    """
+
+    m_def = Section(label='Raw File Optical Microscopy (Parser Tutorial 3)')
+
+    measurement = Quantity(
+        type=OpticalMicroscopy,
+        description='A reference to the optical microscopy entry that was '
+        'generated from this data.',
+    )
+
+
 m_package.__init_metainfo__()

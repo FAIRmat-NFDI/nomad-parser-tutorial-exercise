@@ -97,7 +97,7 @@ class OpticalMicroscopy(Measurement, EntryData):
                 os.path.dirname(self.data_file), image_file_name
             )
 
-        merge_sections(self, measurement, logger=logger)
+        # merge_sections(self, measurement, logger=logger)
 
     def normalize(self, archive: 'EntryArchive', logger: 'BoundLogger') -> None:
         """
@@ -110,9 +110,11 @@ class OpticalMicroscopy(Measurement, EntryData):
 
         data_dict = {}
         if self.data_file is not None:
-            data_dict = read_data_file(self.data_file, archive, logger)
+            raise NotImplementedError
+            # data_dict = read_data_file(self.data_file, archive, logger)
         if data_dict:
-            self.write_data(data_dict, logger)
+            raise NotImplementedError
+            # self.write_data(data_dict, logger)
 
 
 m_package.__init_metainfo__()
