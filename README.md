@@ -22,7 +22,7 @@ uv sync --extra dev
 . .venv/bin/activate
 ```
 
-Installation with pip:
+If you don't use uv, install with pip instead:
 ```sh
 python3.12 -m venv .venv
 . .venv/bin/activate
