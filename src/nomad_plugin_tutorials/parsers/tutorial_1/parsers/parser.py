@@ -36,9 +36,9 @@ class OpticalMicroscopyParser(MatchingParser):
 
         measurement.m_setdefault('settings')
         if resolution := data_dict.get('resolution'):
-            measurement.resolution = [float(x) for x in resolution.split('x')]
+            measurement.settings.resolution = [float(x) for x in resolution.split('x')]
         if magnification := data_dict.get('magnification'):
-            measurement.magnification = float(magnification[:-1])
+            measurement.settings.magnification = float(magnification[:-1])
 
         measurement.m_setdefault('results/0')
         if image_file_name := data_dict.get('imageFileName'):
