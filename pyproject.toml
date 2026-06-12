@@ -18,39 +18,24 @@ dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "Lev Ginzburg"},
+    { name = "Lev Ginzburg" },
     { name = "Sarthak Kapoor" },
     { name = "Hampus Näsström" },
     { email = "fairmat@physik.hu-berlin.de" },
 ]
-maintainers = [
-    { name = "FAIRmat", email = "fairmat@physik.hu-berlin.de" },
-]
+maintainers = [{ name = "FAIRmat", email = "fairmat@physik.hu-berlin.de" }]
 license = { file = "LICENSE" }
-dependencies = [
-    "nomad-lab>=1.4.2",
-    "numpy",
-    "plotly",
-]
+dependencies = ["nomad-lab>=1.4.2", "numpy", "plotly"]
 
 [project.urls]
 Repository = "https://github.com/FAIRmat-NFDI/nomad-plugin-tutorial"
 
 [project.optional-dependencies]
-dev = [
-    "ruff",
-    "pytest",
-    "structlog",
-    "mkdocs",
-    "mkdocs-material",
-    "pymdown-extensions",
-    "mkdocs-click",
-    "pytest-asyncio",
-]
+dev = ["ruff", "pytest", "structlog"]
 
 [tool.uv]
 extra-index-url = [
-  "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
+    "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
 
 [tool.ruff]
@@ -99,9 +84,9 @@ select = [
 ]
 
 ignore = [
-    "F403", # 'from module import *' used; unable to detect undefined names
+    "F403",    # 'from module import *' used; unable to detect undefined names
     "PLC0415", # `import` should be at the top-level of a file
-    "E501", # line too long
+    "E501",    # line too long
 ]
 
 fixable = ["ALL"]
