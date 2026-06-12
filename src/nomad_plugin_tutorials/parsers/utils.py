@@ -1,41 +1,12 @@
 from typing import TYPE_CHECKING
 
 import numpy as np
-from nomad.utils import hash as nomad_hash
 
 if TYPE_CHECKING:
     from nomad.datamodel.data import (
         ArchiveSection,
     )
-    from nomad.datamodel.datamodel import (
-        EntryArchive,
-    )
     from structlog import BoundLogger
-
-
-def get_reference(upload_id: str, entry_id: str) -> str:
-    return f'../uploads/{upload_id}/archive/{entry_id}#data'
-
-
-def get_entry_id_from_file_name(file_name: str, archive: 'EntryArchive') -> str:
-    return nomad_hash(archive.metadata.upload_id, file_name)
-
-
-def create_archive(
-    entity: 'ArchiveSection',
-    archive: 'EntryArchive',
-    file_name: str,
-    overwrite: bool = False,
-) -> str:
-    if overwrite or not archive.m_context.raw_path_exists(file_name):
-        with archive.m_context.update_entry(
-            file_name, write=True, process=True
-        ) as entry:
-            entry['data'] = entity.m_to_dict(with_root_def=True)
-    return get_reference(
-        archive.metadata.upload_id,  # pyright: ignore[reportArgumentType]
-        get_entry_id_from_file_name(file_name, archive),
-    )
 
 
 def _not_equal(a, b) -> bool:
