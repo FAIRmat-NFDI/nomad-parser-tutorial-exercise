@@ -1,7 +1,7 @@
 import os
 from typing import TYPE_CHECKING
 
-from nomad.datamodel.data import ArchiveSection, EntryData
+from nomad.datamodel.data import ArchiveSection
 from nomad.datamodel.metainfo.annotations import (
     BrowserAdaptors,
     BrowserAnnotation,
@@ -9,6 +9,7 @@ from nomad.datamodel.metainfo.annotations import (
     ELNComponentEnum,
 )
 from nomad.datamodel.metainfo.basesections import Measurement
+from nomad.datamodel.metainfo.eln import ElnParserSection
 from nomad.metainfo.metainfo import Quantity, SchemaPackage, Section, SubSection
 
 from nomad_plugin_tutorials.parsers.reader import read_data_file
@@ -44,7 +45,7 @@ class OpticalMicroscopyResults(ArchiveSection):
     )
 
 
-class OpticalMicroscopy(Measurement, EntryData):
+class OpticalMicroscopy(Measurement, ElnParserSection):
     """
     An example ELN schema for optical microscopy measurements. Using `EntryData` as
     a parent section enables this section to be used for creating NOMAD entries.
@@ -52,12 +53,6 @@ class OpticalMicroscopy(Measurement, EntryData):
 
     m_def = Section(
         label='Optical Microscopy (Parser Tutorial 2)',
-    )
-    data_file = Quantity(
-        type=str,
-        description='Data file coming from the microscope.',
-        a_eln=ELNAnnotation(component=ELNComponentEnum.FileEditQuantity),
-        a_browser=BrowserAnnotation(adaptor=BrowserAdaptors.RawFileAdaptor),
     )
     settings = SubSection(section_def=OpticalMicroscopySettings)
     results = SubSection(section_def=OpticalMicroscopyResults, repeats=True)
@@ -113,20 +108,6 @@ class OpticalMicroscopy(Measurement, EntryData):
             data_dict = read_data_file(self.data_file, archive, logger)
         if data_dict:
             self.write_data(data_dict, logger)
-
-
-class RawFileOpticalMicroscopy(EntryData):
-    """
-    Section for storing a directly parsed raw data file.
-    """
-
-    m_def = Section(label='Raw File Optical Microscopy (Parser Tutorial 3)')
-
-    data_file = Quantity(
-        type=OpticalMicroscopy,
-        description='A reference to the optical microscopy entry that was '
-        'generated from this data.',
-    )
 
 
 m_package.__init_metainfo__()
