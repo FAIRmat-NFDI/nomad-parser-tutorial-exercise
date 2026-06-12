@@ -122,7 +122,7 @@ class RawFileOpticalMicroscopy(EntryData):
 
     m_def = Section(label='Raw File Optical Microscopy (Parser Tutorial 3)')
 
-    measurement = Quantity(
+    data_file = Quantity(
         type=OpticalMicroscopy,
         description='A reference to the optical microscopy entry that was '
         'generated from this data.',
